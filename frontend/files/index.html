@@ -1,0 +1,83 @@
+<html>
+   <head>
+      <title>Project Misis</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js" integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js" integrity="sha256-S1J4GVHHDMiirir9qsXWc8ZWw74PHHafpsHp5PXtjTs=" crossorigin="anonymous"></script>
+    </head>
+   
+   <body>
+      <div id = "app">
+          <div style="text-align: center; margin-bottom: 20vh;background-color:#8bc34a;">Project Master Misis 2020
+              <br>
+              <b>Student</b>: Мохаммад Насир Фазел Раби 
+              <br>
+              <b> Teacher:</b> Ivan Zorin
+              <br>
+              <b>Subject</b>: Web Services and SaaS services
+              <br>
+              <b>Project Description</b>: 3 Microservices made in NodeJs: Microservices (FrontEnd, UrlShortener and EmailChecker)
+          </div>
+        <div style="width: 100%; display: inline-flex;">
+            <div style="width: 50%;text-align: center;">
+            <h3>Url Shortener</h3>
+            <input v-model="urlToShort" />
+            <button @click="short()">Short Url</button>
+            <br>
+            <br>
+            <br>
+            Your url shortened: {{urlShortened}}
+            </div>
+            <div style="width: 50%;text-align: center;">
+                    <h3>Email Checker</h3>
+                    <input v-model="emailToCheck" />
+                    <button @click="checkEmail()">Check</button>
+                    <br>
+                    <br>
+                    <br>
+                   {{emailFlag}}
+            </div>
+        </div>
+   
+      </div>
+
+      <script type = "text/javascript" >
+      var app = new Vue({
+   el: '#app',
+   data: {
+        urlToShort: '',
+        urlShortened: '',
+        emailToCheck: '',
+        emailFlag: ''
+   },
+   methods: {
+    short() {
+               tScope = this;
+                axios.post('http://35.228.136.252/short', {
+                url:this.urlToShort
+                })
+                .then(function (response) {
+                    tScope.urlToShort = '';
+                    tScope.urlShortened = response.data.result_url;
+                })
+                .catch(function (error) {
+      console.log('Err');
+                });
+            },
+            checkEmail() {
+                tScope = this;
+                axios.post('http://35.228.20.226/check', {
+                email:this.emailToCheck
+                })
+                .then(function (response) {
+                    (response.data.valid==true)?tScope.emailFlag="Response: The email is Valid": tScope.emailFlag="Response: Email is not valid";
+                    tScope.emailToCheck = '';
+                })
+                .catch(function (error) {
+      console.log('Err');
+                });
+            }
+        }
+})
+      </script>
+   </body>
+</html>
